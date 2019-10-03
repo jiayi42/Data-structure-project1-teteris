@@ -104,48 +104,64 @@ void blocks(char* a,int** game_blocks){
   }*/
   //return game_blocks;
 }
+void fall_blocks(int** game,int** game_blocks){
+ char whatblock[2];
+ int start_col;
+ cin>>whatblock>>start_col; 
+ blocks(whatblock,game_blocks);
+ start_col=start_col-1; 
+  /*TODO
+  //fall judge and concate properly
+  */
 
+ for(int i =0; i < 4; ++i)
+ for(int j = 0; j <4; ++j){
+   game[i][j+start_col]=game_blocks[i][j];
+ }
+
+}
+void delete_satisfied_rows(int** game){
+  /*TODO
+  //delete satisfied row and update properly
+  */
+}
+bool judge_game_result(int** game){
+  /*TODO
+  //now, judge the left rows is legal or not
+  */
+ return false;
+}
 int main()
 {
   int m,n,mm,nn;
   cin>>mm>>nn;
   m=mm;
   n=nn;
-int** game = new int*[m+4];//double pointer record pointer(for each row)
-for(int i = 0; i < m+4; ++i)game[i] = new int[n+3];//allocate elements space of each row
-for(int i = 0; i < m+4; ++i)
-  for(int j = 0; j <n+3; ++j){
-    game[i][j]=0;
+  ///////////////////////////////////////////////////////////////////////
+  int** game = new int*[m+4];//double pointer record pointer(for each row)
+  for(int i = 0; i < m+4; ++i)game[i] = new int[n+3];//allocate elements space of each row
+  for(int i = 0; i < m+4; ++i)
+    for(int j = 0; j <n+3; ++j){
+      game[i][j]=0;
+    }
+  int** game_blocks =new int*[4];
+  for(int i = 0; i < 4; ++i)game_blocks[i] = new int[4];
+  ///////////////////////////////////////////////////////////////////////
+  bool judge=true;
+  while(judge){
+    fall_blocks(game,game_blocks);
+    delete_satisfied_rows(game);
+    judge=judge_game_result(game);
+    if(!(judge)){
+      for(int i = 4; i < m+4; ++i){
+          for(int j = 0; j <n; ++j)cout<<game[i][j];
+          cout<<endl;
+        }
+      break;
+    }
   }
-
-
-int** game_blocks =new int*[4];
-for(int i = 0; i < 4; ++i)game_blocks[i] = new int[4];
-
-char whatblock[2];
-int start_col;
-
-cin>>whatblock>>start_col; 
-blocks(whatblock,game_blocks);
-start_col=start_col-1; 
-
-
-
-
-
-for(int i =0; i < 4; ++i)
- for(int j = 0; j <4; ++j){
-   game[i][j+start_col]=game_blocks[i][j];
- }
-
-
-
-for(int i = 0; i < m+4; ++i){
-
-  for(int j = 0; j <n; ++j)cout<<game[i][j];
-  cout<<endl;
-}
- delete []game;
+  ////////////////////////////////////////////////////////////////////////
+  delete []game;
 }
 
 
