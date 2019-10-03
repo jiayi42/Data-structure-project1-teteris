@@ -1,7 +1,35 @@
 #include <iostream>
 #include <string.h>
 using namespace std;
+int m,n,mm,nn;
 
+int hit_check_row(int space, int** game,int** game_blocks,int start_col,int pos){
+  for(int i=4; i < m+4; ++i){
+    if(game[i][start_col]==1 && game_blocks[3-space][0]==1){
+        cout<<space<<" "<<0<<endl;
+       cout<<i-1+space<<endl;
+      return i-1+space;
+    }
+    if(game[i][start_col+1]==1 && game_blocks[3-space][1]==1){
+      cout<<space<<" "<<1<<endl;
+      cout<<i-1+space<<endl;
+      return i-1+space;
+    }
+    if(game[i][start_col+2]==1 && game_blocks[3-space][2]==1){
+      cout<<space<<" "<<2<<endl;
+        cout<<i-1+space<<endl;
+      return i-1+space;
+    }
+    if(game[i][start_col+3]==1 && game_blocks[3-space][3]==1){
+      cout<<space<<" "<<3<<endl;
+       cout<<i-1+space<<endl;
+      return i-1+space;
+    }
+  }
+  cout<<space<<" "<<start_col<<endl;
+  cout<<pos<<endl;
+  return pos;
+}
 void blocks(char* a,int** game_blocks){
  char p[2];
  p[0]=a[0];p[1]=a[1];
@@ -110,14 +138,23 @@ void fall_blocks(int** game,int** game_blocks){
  cin>>whatblock>>start_col; 
  blocks(whatblock,game_blocks);
  start_col=start_col-1; 
-  /*TODO
-  //fall judge and concate properly
-  */
-
- for(int i =0; i < 4; ++i)
- for(int j = 0; j <4; ++j){
-   game[i][j+start_col]=game_blocks[i][j];
+  //fall judge and concate properly//////////////////////////
+ int pos=-5;
+ for(int i=0; i < 4; ++i){
+   
+   pos=hit_check_row(i,game,game_blocks,start_col,pos);
+   if (pos!=-5)break;
  }
+
+ if (pos==-5){
+   pos=m+3;
+ }
+ cout<<"update"<<pos-3<<" "<<start_col<<endl;
+ for(int i =0; i <4; ++i)
+   for(int j = 0; j <4; ++j){
+     
+     if(game[pos+i-3][j+start_col]!=1)game[pos+i-3][j+start_col]=game_blocks[i][j];//has problem
+    }
 
 }
 void delete_satisfied_rows(int** game){
@@ -129,11 +166,11 @@ bool judge_game_result(int** game){
   /*TODO
   //now, judge the left rows is legal or not
   */
- return false;
+ return true;
 }
 int main()
 {
-  int m,n,mm,nn;
+  
   cin>>mm>>nn;
   m=mm;
   n=nn;
@@ -150,14 +187,13 @@ int main()
   bool judge=true;
   while(judge){
     fall_blocks(game,game_blocks);
-    delete_satisfied_rows(game);
-    judge=judge_game_result(game);
-    if(!(judge)){
+    //delete_satisfied_rows(game);
+    //judge=judge_game_result(game);
+    //if(!(judge)){
       for(int i = 4; i < m+4; ++i){
           for(int j = 0; j <n; ++j)cout<<game[i][j];
           cout<<endl;
-        }
-      break;
+
     }
   }
   ////////////////////////////////////////////////////////////////////////
