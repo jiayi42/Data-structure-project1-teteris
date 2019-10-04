@@ -1,5 +1,7 @@
 #include <iostream>
+#include <fstream>
 #include <string.h>
+#include <stdio.h>
 using namespace std;
 int m,n,mm,nn;
 
@@ -132,10 +134,10 @@ void blocks(char* a,int** game_blocks){
   }*/
   //return game_blocks;
 }
-void fall_blocks(int** game,int** game_blocks){
- char whatblock[2];
- int start_col;
- cin>>whatblock>>start_col; 
+void fall_blocks(char* whatblock,int start_col,int** game,int** game_blocks){
+ //char whatblock[3];
+ //int start_col;
+ //cin>>whatblock>>start_col; 
  blocks(whatblock,game_blocks);
  start_col=start_col-1; 
   //fall judge and concate properly//////////////////////////
@@ -186,17 +188,28 @@ void delete_satisfied_rows(int** game){
   //cout<<"delete signal"<<signal<<endl;
 }
 bool judge_game_result(int** game){
-  /*TODO
-  //now, judge the left rows is legal or not
-  */
+  for(int i=0; i<4;i++)
+    for(int j = 0; j <n; ++j)
+    if(game[i][j]==1) return false;
  return true;
 }
+
 int main()
 {
+  ifstream myfile ("tetris.data");
+  ofstream outfile ("tetris.final");
+  int mmm,nnn;
+  int kkk;
+  char pp[3];
+
+  myfile>>mmm>>nnn;
+  m=mmm;
+  n=nnn;
+  char* buffer = new char[n];
+  //string line;
+
   
-  cin>>mm>>nn;
-  m=mm;
-  n=nn;
+
   ///////////////////////////////////////////////////////////////////////
   int** game = new int*[m+4];//double pointer record pointer(for each row)
   for(int i = 0; i < m+4; ++i)game[i] = new int[n+3];//allocate elements space of each row
@@ -210,19 +223,35 @@ int main()
   for(int i = 0; i < 4; ++i)game_blocks[i] = new int[4];
   ///////////////////////////////////////////////////////////////////////
   bool judge=true;
+  char p_p[3];
+  int k_k;   
   while(judge){
-    fall_blocks(game,game_blocks);
-    delete_satisfied_rows(game);
-    //judge=judge_game_result(game);
-    //if(!(judge)){
-      for(int i = 0; i < m+4; ++i){
-          for(int j = 0; j <n; ++j)cout<<game[i][j];
-          cout<<endl;
 
+    myfile>>p_p>>k_k;
+    for(int j = 0; j <3; j++)pp[j]=p_p[j];
+    kkk=k_k;
+    /////////////////////////////////////////
+    if((strncmp(pp,"End",3)==0))break;
+    /////////////////////////////////////////    
+    fall_blocks(pp,kkk,game,game_blocks);
+    delete_satisfied_rows(game);
+    judge=judge_game_result(game);
+
+  }
+  if(!(judge) ||(strncmp(pp,"End",3)==0)){
+    for(int i = 4; i < m+4; ++i){
+        for(int j = 0; j <n; ++j){
+          sprintf(&(buffer[j]),"%d",game[i][j]);          
+        }
+        outfile<<buffer;
+        outfile << endl;
     }
   }
+  outfile.close();
+  myfile.close();
   ////////////////////////////////////////////////////////////////////////
   delete []game;
+  delete []game_blocks;
 }
 
 
