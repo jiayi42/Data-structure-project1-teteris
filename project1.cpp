@@ -70,6 +70,7 @@ void blocks(char* a,int** game_blocks){
                 0,0,1,0,
                 1,1,1,0};
   ////////////////////////////
+
   int J1[16]= { 0,0,0,0,
                 0,1,0,0,
                 0,1,0,0,
@@ -86,6 +87,23 @@ void blocks(char* a,int** game_blocks){
                 0,0,0,0,
                 1,1,1,0,
                 0,0,1,0};
+  ////////////////////////////
+  int S1[16]= { 0,0,0,0,
+                0,0,0,0,
+                0,1,1,0,
+                1,1,0,0};
+  int S2[16]= { 0,0,0,0,
+                1,0,0,0,
+                1,1,0,0,
+                0,1,0,0};
+  int Z1[16]= { 0,0,0,0,
+                0,0,0,0,
+                1,1,0,0,
+                0,1,1,0};
+  int Z2[16]= { 0,0,0,0,
+                0,1,0,0,
+                1,1,0,0,
+                1,0,0,0};
   ////////////////////////////
   int I1[16]= { 1,0,0,0,
                 1,0,0,0,
@@ -114,6 +132,12 @@ void blocks(char* a,int** game_blocks){
  if(strncmp(p,"J2",2)==0) for(int i = 0; i < 4; ++i)for(int j = 0; j <4; ++j) game_blocks[i][j]=J2[i*4+j];
  if(strncmp(p,"J3",2)==0) for(int i = 0; i < 4; ++i)for(int j = 0; j <4; ++j) game_blocks[i][j]=J3[i*4+j];
  if(strncmp(p,"J4",2)==0) for(int i = 0; i < 4; ++i)for(int j = 0; j <4; ++j) game_blocks[i][j]=J4[i*4+j];
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////
+ if(strncmp(p,"S1",2)==0) for(int i = 0; i < 4; ++i)for(int j = 0; j <4; ++j) game_blocks[i][j]=S1[i*4+j];
+ if(strncmp(p,"S2",2)==0) for(int i = 0; i < 4; ++i)for(int j = 0; j <4; ++j) game_blocks[i][j]=S2[i*4+j];
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////
+ if(strncmp(p,"Z1",2)==0) for(int i = 0; i < 4; ++i)for(int j = 0; j <4; ++j) game_blocks[i][j]=Z1[i*4+j];
+ if(strncmp(p,"Z2",2)==0) for(int i = 0; i < 4; ++i)for(int j = 0; j <4; ++j) game_blocks[i][j]=Z2[i*4+j];
  /////////////////////////////////////////////////////////////////////////////////////////////////////////
  if(strncmp(p,"I1",2)==0) for(int i = 0; i < 4; ++i)for(int j = 0; j <4; ++j) game_blocks[i][j]=I1[i*4+j];
  if(strncmp(p,"I2",2)==0) for(int i = 0; i < 4; ++i)for(int j = 0; j <4; ++j) game_blocks[i][j]=I2[i*4+j];
@@ -238,11 +262,17 @@ int main()
     judge=judge_game_result(game);
 
   }
+  for(int j = 0; j <n; ++j){
+          buffer[j]='0';          
+        }
   if(!(judge) ||(strncmp(pp,"End",3)==0)){
+    //cout<<"ednd"<<endl;
     for(int i = 4; i < m+4; ++i){
         for(int j = 0; j <n; ++j){
           sprintf(&(buffer[j]),"%d",game[i][j]);          
         }
+        //cout<<buffer;
+        //cout<< endl;
         outfile<<buffer;
         outfile << endl;
     }
@@ -252,6 +282,7 @@ int main()
   ////////////////////////////////////////////////////////////////////////
   delete []game;
   delete []game_blocks;
+  delete []buffer;
 }
 
 
