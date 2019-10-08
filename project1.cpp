@@ -181,20 +181,21 @@ void fall_blocks(char* whatblock,int start_col,int** game,int** game_blocks){
  //cout<<game[19][14]<<endl;
  
    pos=hit_check_row(game,game_blocks,start_col,pos);
-   //if (pos!=-5)break;
- 
+   //if (pos==-5) cout<<-5<<endl;;
+   if (pos>=m+4)pos=-5;
 
  if (pos==-5){
    pos=m+3;
  }
- //cout<<"update"<<pos-3<<" "<<start_col<<endl;
- 
+
  for(int i =0; i <4; ++i)
    for(int j = 0; j <4; ++j){
-     //cout<<"X";
-     if(game[pos+i-3][j+start_col]!=1)game[pos+i-3][j+start_col]=game_blocks[i][j];
+     //cout<<pos+i-3<<"X";
+     if(game[pos+i-3][j+start_col]!=1)
+     game[pos+i-3][j+start_col]=game_blocks[i][j];
     }
  //cout<<endl;
+ 
 }
 void delete_satisfied_rows(int** game){
   
@@ -209,13 +210,13 @@ void delete_satisfied_rows(int** game){
     }
     
     if( signal==1){
-      //cout<<"delete row="<<k-3<<endl;
+      //cout<<"delete row="<<k<<endl;
 
       for(int i=k; i>0;i--)
         for(int j = 0; j <n; ++j){
-          temp=game[i-1][j];
-          game[i][j]=temp;
-        }
+          game[i][j]=game[i-1][j];
+          
+                  }
       for(int i=0; i<n;i++){
        game[0][i]=0;
       }  
