@@ -5,29 +5,41 @@
 using namespace std;
 int m,n,mm,nn;
 
-int hit_check_row(int space, int** game,int** game_blocks,int start_col,int pos){
+int hit_check_row( int** game,int** game_blocks,int start_col,int pos){
+  //cout<<"sow="<<" "<<game[18][13]<<endl;
+  //cout<<"sow="<<" "<<game[18][14]<<endl;
+  //cout<<"sow="<<" "<<game[19][14]<<endl;
   for(int i=4; i < m+4; ++i){
-    if(game[i][start_col]==1 && game_blocks[3-space][0]==1){
-       //cout<<space<<" "<<0<<endl;
-       //cout<<i-1+space<<endl;
-      return i-1+space;
-    }
-    if(game[i][start_col+1]==1 && game_blocks[3-space][1]==1){
-      //cout<<space<<" "<<1<<endl;
-      //cout<<i-1+space<<endl;
-      return i-1+space;
-    }
-    if(game[i][start_col+2]==1 && game_blocks[3-space][2]==1){
-      //cout<<space<<" "<<2<<endl;
-      //  cout<<i-1+space<<endl;
-      return i-1+space;
-    }
-    if(game[i][start_col+3]==1 && game_blocks[3-space][3]==1){
-      //cout<<space<<" "<<3<<endl;
-      // cout<<i-1+space<<endl;
-      return i-1+space;
-    }
+    for (int space=0;space<4;space++){
+      if(game[i][start_col]==1 && game_blocks[3-space][0]==1){
+        //cout<<"hit row="<<" "<<i-3<<endl;
+        //cout<<"hit gbcol="<<" "<<1<<endl;
+        //cout<<"shift row space="<<" "<<space<<endl;
+        return i-1+space;
+      }
+      if(game[i][start_col+1]==1 && game_blocks[3-space][1]==1){
+        
+        //cout<<"hit row="<<" "<<i-3<<endl;
+        //cout<<"hit gbcol="<<" "<<2<<endl;
+        //cout<<"shift row space="<<" "<<space<<endl;
+        return i-1+space;
+      }
+      if(game[i][start_col+2]==1 && game_blocks[3-space][2]==1){
+        //cout<<"hit row="<<" "<<i-3<<endl;
+        //cout<<"hit gbcol="<<" "<<3<<endl;
+        //cout<<"shift row space="<<" "<<space<<endl;
+        return i-1+space;
+      }
+      if(game[i][start_col+3]==1 && game_blocks[3-space][3]==1){
+        //cout<<"hit row="<<" "<<i-3<<endl;
+        //cout<<"hit gbcol="<<" "<<4<<endl;
+        //cout<<"shift row space="<<" "<<space<<endl;
+        return i-1+space;
+      }
+    }    
   }
+    
+
   //cout<<space<<" "<<start_col<<endl;
   //cout<<pos<<endl;
   return pos;
@@ -166,10 +178,11 @@ void fall_blocks(char* whatblock,int start_col,int** game,int** game_blocks){
  start_col=start_col-1; 
   //fall judge and concate properly//////////////////////////
  int pos=-5;
- for(int i=0; i < 4; ++i){
-   pos=hit_check_row(i,game,game_blocks,start_col,pos);
-   if (pos!=-5)break;
- }
+ //cout<<game[19][14]<<endl;
+ 
+   pos=hit_check_row(game,game_blocks,start_col,pos);
+   //if (pos!=-5)break;
+ 
 
  if (pos==-5){
    pos=m+3;
@@ -187,24 +200,27 @@ void delete_satisfied_rows(int** game){
   
   int k=4;
   int signal=1;
-
+  int temp=0;
   while(k<m+4){
     signal=1;
-
+  
     for(int i=0; i<n;i++){
       if(game[k][i]==0){ signal=0;break;}
     }
+    
     if( signal==1){
-      //cout<<"delete row"<<k<<endl;
+      //cout<<"delete row="<<k-3<<endl;
 
       for(int i=k; i>0;i--)
         for(int j = 0; j <n; ++j){
-          game[i][j]=game[i-1][j];
+          temp=game[i-1][j];
+          game[i][j]=temp;
         }
       for(int i=0; i<n;i++){
        game[0][i]=0;
       }  
-      k=4;    
+      k=4;  
+      continue;  
     }
 
     k++;
@@ -254,13 +270,19 @@ int main()
     myfile>>p_p>>k_k;
     for(int j = 0; j <3; j++)pp[j]=p_p[j];
     kkk=k_k;
+    //cout<<pp<<" "<<kkk<<endl;
     /////////////////////////////////////////
     if((strncmp(pp,"End",3)==0))break;
     /////////////////////////////////////////    
     fall_blocks(pp,kkk,game,game_blocks);
     delete_satisfied_rows(game);
     judge=judge_game_result(game);
-
+    /*for(int i = 4; i < m+4; ++i){
+          for(int j = 0; j <n; ++j)
+              cout<<game[i][j];
+       cout<< endl;
+    }
+    cout<< endl;*/
   }
   for(int j = 0; j <n; ++j){
           buffer[j]='0';          
@@ -277,6 +299,16 @@ int main()
         outfile << endl;
     }
   }
+  /*for(int i = 0; i < m+4; ++i){
+          for(int j = 0; j <n+3; ++j)
+              cout<<game[i][j];
+       cout<< endl;
+    }*/
+    
+
+       
+      
+    
   outfile.close();
   myfile.close();
   ////////////////////////////////////////////////////////////////////////
